@@ -58,5 +58,5 @@ func main() {
 		panic(err)
 	}
 
-	res.Download()
+	res.Download(false)
 }

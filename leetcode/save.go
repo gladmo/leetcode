@@ -19,7 +19,7 @@ type Localization struct {
 	Tags           []string `json:"tags"`
 }
 
-func (th *Localization) Save() {
+func (th *Localization) Save(override bool) {
 	baseDir := "questions"
 	so := SaveOption{
 		saveDir:        baseDir,
@@ -42,6 +42,16 @@ func (th *Localization) Save() {
 	}
 
 	so.saveDir = path.Join(baseDir, "serial", th.Difficulty, th.QuestionID)
+
+	// 已存在不重新获取，除非强制
+	if f, err := os.Stat(path.Join(so.saveDir, so.language)); err == nil && f.IsDir() && !override {
+		fmt.Println("--------", so.language, "-------")
+		fmt.Println("是否覆盖: ", override)
+		fmt.Println("语言: ", so.language)
+		fmt.Println("题目已经存在: ", so.saveDir)
+		return
+	}
+
 	err := so.SaveQuestion()
 	if err != nil {
 		fmt.Println(err)

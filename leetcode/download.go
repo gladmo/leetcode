@@ -62,7 +62,7 @@ type QuestionDetail struct {
 	} `json:"data"`
 }
 
-func (th *QuestionDetail) Download() {
+func (th *QuestionDetail) Download(override bool) {
 	questionMarkdown := html.UnescapeString(html2md.Convert(th.Data.Question.TranslatedContent))
 
 	var tags []string
@@ -83,6 +83,6 @@ func (th *QuestionDetail) Download() {
 			Tags:           tags,
 		}
 
-		localization.Save()
+		localization.Save(override)
 	}
 }

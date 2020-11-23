@@ -16,7 +16,7 @@ func (th SaveOption) golang() (err error) {
 		return
 	}
 
-	code, ok := parseCode(th.codeSnippet)
+	code, ok := parseGoCode(th.codeSnippet)
 	if !ok {
 		code = `func Export()  {
 
@@ -74,7 +74,7 @@ func main() {
 	return
 }
 
-func parseCode(code string) (newCode string, ok bool) {
+func parseGoCode(code string) (newCode string, ok bool) {
 	ok = true
 
 	start := strings.Index(code, `func `)
@@ -86,10 +86,12 @@ func parseCode(code string) (newCode string, ok bool) {
 		typeIndex := strings.Index(code, `type`)
 		commentRightParentheses := strings.Index(code, `}`)
 		if typeIndex < commentRightParentheses {
-			structCode = strings.Replace(comment[typeIndex:commentRightParentheses], "*", "", -1)
+			sc := comment[typeIndex:commentRightParentheses]
+			for _, c := range strings.Split(sc, "\n") {
+				structCode += "\n" + strings.Replace(strings.TrimSpace(c), "*", "", 1)
+			}
 
-			structCode = strings.TrimSpace(structCode)
-			structCode += "\n}\n\n"
+			structCode += "}\n\n"
 		}
 	}
 
