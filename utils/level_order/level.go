@@ -76,6 +76,38 @@ func (th *TreeNode) String() string {
 	return fmt.Sprintf("[%s]", strings.Join(LevelOrder(th), ","))
 }
 
+func (th *TreeNode) LevelOrder() [][]int {
+	var res [][]int
+	if th == nil {
+		return res
+	}
+
+	queue := []*TreeNode{th}
+
+	for i := 0; len(queue) > 0; i++ {
+		res = append(res, []int{})
+
+		var tmp []*TreeNode
+
+		for j := 0; j < len(queue); j++ {
+			node := queue[j]
+
+			res[i] = append(res[i], node.Val)
+			if node.Left != nil {
+				tmp = append(tmp, node.Left)
+			}
+
+			if node.Right != nil {
+				tmp = append(tmp, node.Right)
+			}
+		}
+
+		queue = tmp
+	}
+
+	return res
+}
+
 func LevelOrder(root *TreeNode) []string {
 	var res []string
 	if root == nil {
