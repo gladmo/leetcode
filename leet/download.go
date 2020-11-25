@@ -74,7 +74,7 @@ func (th *QuestionDetail) Download(override bool) {
 
 %s`,
 		th.Data.Question.TranslatedTitle,
-		fmt.Sprintf("https://leet-cn.com/problems/%s/", th.Data.Question.TitleSlug),
+		fmt.Sprintf("https://leetcode-cn.com/problems/%s/", th.Data.Question.TitleSlug),
 		questionMarkdown)
 
 	var tags []string

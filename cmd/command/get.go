@@ -12,7 +12,7 @@ import (
 
 var getCmd = &cobra.Command{
 	Use:     "get question_id|leetcode_url",
-	Short:   "get leet question from leet-cn.com",
+	Short:   "get leet question from leetcode-cn.com",
 	Example: "leet get 222",
 	Run: func(cmd *cobra.Command, args []string) {
 

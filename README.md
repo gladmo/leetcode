@@ -116,7 +116,7 @@ Usage:
 Available Commands:
   base        clear & replace all question use you specified
   clear       set questions to default
-  get         get leet question from leet-cn.com
+  get         get leet question from leetcode-cn.com
   help        Help about any command
   info        print leet question info
   test        test you code and analyse

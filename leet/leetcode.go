@@ -15,14 +15,14 @@ import (
 const UA = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36`
 
 func getCookie() (cookie []*http.Cookie, err error) {
-	URL := "https://leet-cn.com/graphql/"
+	URL := "https://leetcode-cn.com/graphql/"
 	payload := strings.NewReader(`{"operationName":"globalData","variables":{},"query":"query globalData {\n  feature {\n    questionTranslation\n    subscription\n    signUp\n    discuss\n    mockInterview\n    contest\n    store\n    book\n    chinaProblemDiscuss\n    socialProviders\n    studentFooter\n    cnJobs\n    enableLsp\n    enableWs\n    enableDebugger\n    enableDebuggerAdmin\n    enableDarkMode\n    tasks\n    leetbook\n    enableEduDiscount\n    __typename\n  }\n  userStatus {\n    isSignedIn\n    isAdmin\n    isStaff\n    isSuperuser\n    isTranslator\n    isPremium\n    isVerified\n    isPhoneVerified\n    isWechatVerified\n    checkedInToday\n    username\n    realName\n    userSlug\n    groups\n    avatar\n    optedIn\n    requestRegion\n    region\n    socketToken\n    activeSessionId\n    permissions\n    notificationStatus {\n      lastModified\n      numUnread\n      __typename\n    }\n    completedFeatureGuides\n    useTranslation\n    accountStatus {\n      isFrozen\n      inactiveAfter\n      __typename\n    }\n    __typename\n  }\n  siteRegion\n  chinaHost\n  websocketUrl\n  userBannedInfo {\n    bannedData {\n      endAt\n      bannedType\n      __typename\n    }\n    __typename\n  }\n  commonNojPermissionTypes\n  jobsMyCompany {\n    name\n    __typename\n  }\n  myLastCompanyClaimApplication(status: PENDING) {\n    id\n    name\n    countryCode\n    phone\n    department\n    jobTitle\n    createdAt\n    opinion\n    reviewedAt\n    claimType\n    status\n    companyTag {\n      name\n      translatedName\n      slug\n      __typename\n    }\n    authorization\n    businessLicense\n    __typename\n  }\n}\n"}`)
 
 	req, err := http.NewRequest(http.MethodPost, URL, payload)
 	if err != nil {
 		return
 	}
-	req.Header.Add("authority", "leet-cn.com")
+	req.Header.Add("authority", "leetcode-cn.com")
 	req.Header.Add("pragma", "no-cache")
 	req.Header.Add("cache-control", "no-cache")
 	req.Header.Add("x-timezone", "Asia/Shanghai")
@@ -33,11 +33,11 @@ func getCookie() (cookie []*http.Cookie, err error) {
 	req.Header.Add("accept", "*/*")
 	req.Header.Add("x-csrftoken", "undefined")
 	req.Header.Add("x-definition-name", "feature,userStatus,siteRegion,chinaHost,websocketUrl,userBannedInfo,commonNojPermissionTypes,jobsMyCompany,myLastCompanyClaimApplication")
-	req.Header.Add("origin", "https://leet-cn.com")
+	req.Header.Add("origin", "https://leetcode-cn.com")
 	req.Header.Add("sec-fetch-site", "same-origin")
 	req.Header.Add("sec-fetch-mode", "cors")
 	req.Header.Add("sec-fetch-dest", "empty")
-	req.Header.Add("referer", "https://leet-cn.com/")
+	req.Header.Add("referer", "https://leetcode-cn.com/")
 
 	res, err := http.DefaultTransport.RoundTrip(req)
 	if err != nil {
@@ -62,9 +62,9 @@ func Parse(param string) string {
 	}
 
 	if strings.HasPrefix(param, "http") ||
-		strings.HasPrefix(param, "leet-cn.com") {
+		strings.HasPrefix(param, "leetcode-cn.com") {
 
-		re := regexp.MustCompile(`leet-cn\.com/problems/(.*)`)
+		re := regexp.MustCompile(`leetcode-cn\.com/problems/(.*)`)
 
 		result := re.FindStringSubmatch(param)
 		if len(result) == 2 {
@@ -127,13 +127,13 @@ func problemID2name(id string) (stats QuestionStats, err error) {
 }
 
 func allProblems() (apr AllProblemsResult, err error) {
-	URL := "https://leet-cn.com/api/problems/all/"
+	URL := "https://leetcode-cn.com/api/problems/all/"
 
 	req, err := http.NewRequest(http.MethodGet, URL, nil)
 	if err != nil {
 		return
 	}
-	req.Header.Add("authority", "leet-cn.com")
+	req.Header.Add("authority", "leetcode-cn.com")
 	req.Header.Add("accept", "application/json, text/javascript, */*; q=0.01")
 	req.Header.Add("x-requested-with", "XMLHttpRequest")
 	req.Header.Add("user-agent", UA)
@@ -141,7 +141,7 @@ func allProblems() (apr AllProblemsResult, err error) {
 	req.Header.Add("sec-fetch-site", "same-origin")
 	req.Header.Add("sec-fetch-mode", "cors")
 	req.Header.Add("sec-fetch-dest", "empty")
-	req.Header.Add("referer", "https://leet-cn.com/problemset/all/")
+	req.Header.Add("referer", "https://leetcode-cn.com/problemset/all/")
 	req.Header.Add("accept-language", "zh-CN,zh;q=0.9")
 
 	res, err := http.DefaultTransport.RoundTrip(req)
@@ -199,7 +199,7 @@ type QuestionStats struct {
 }
 
 func Fetch(title string) (qd QuestionDetail, err error) {
-	URL := "https://leet-cn.com/graphql/"
+	URL := "https://leetcode-cn.com/graphql/"
 
 	payload := strings.NewReader(fmt.Sprintf(`{
     "operationName": "questionData",
@@ -227,7 +227,7 @@ func Fetch(title string) (qd QuestionDetail, err error) {
 		req.AddCookie(cookie)
 	}
 
-	req.Header.Add("authority", "leet-cn.com")
+	req.Header.Add("authority", "leetcode-cn.com")
 	req.Header.Add("x-timezone", "Asia/Shanghai")
 	req.Header.Add("x-operation-name", "questionData")
 	req.Header.Add("accept-language", "zh-CN")
@@ -236,11 +236,11 @@ func Fetch(title string) (qd QuestionDetail, err error) {
 	req.Header.Add("accept", "*/*")
 	req.Header.Add("x-csrftoken", csrfToken)
 	req.Header.Add("x-definition-name", "question")
-	req.Header.Add("origin", "https://leet-cn.com")
+	req.Header.Add("origin", "https://leetcode-cn.com")
 	req.Header.Add("sec-fetch-site", "same-origin")
 	req.Header.Add("sec-fetch-mode", "cors")
 	req.Header.Add("sec-fetch-dest", "empty")
-	req.Header.Add("referer", "https://leet-cn.com")
+	req.Header.Add("referer", "https://leetcode-cn.com")
 
 	res, err := http.DefaultTransport.RoundTrip(req)
 	if err != nil {
