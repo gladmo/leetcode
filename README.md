@@ -4,8 +4,12 @@ leetcode 本地化刷题/测试/上传
 在线执行 golang 代码跑算法，可以使用
 [Golang 在线代码执行](https://runcode.6cm.co/go): https://runcode.6cm.co/go
 
+本项目只包含问题及原始网站提供的代码片断，想看题解及代码实现的可查看源站题解或者：[LeetCode-Go](https://github.com/halfrost/LeetCode-Go)
+
+本地刷题及单步调试算法是本仓库存在的意义。
+
 ## Intro
-本仓库是第三方 [`leetcode-cn.com`](https://leetcode-cn.com) 本地化题库，包含本地化测试用例、常用工具包的一个 go 仓库。
+本仓库是 [`leetcode-cn.com`](https://leetcode-cn.com) 本地化题库，包含本地化测试用例、常用 go 工具包的一个仓库。
 
 本仓库主要包含三个功能：
 
