@@ -173,6 +173,6 @@ A: 首先感谢你对项目的支持。
 ```
 
 ## TODO
-[ ] leetcode backup 命令
-[ ] leetcode login
-[ ] leetcode publish
+- [ ] leetcode backup 命令
+- [ ] leetcode login
+- [ ] leetcode publish
