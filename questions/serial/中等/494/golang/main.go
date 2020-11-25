@@ -68,6 +68,4 @@ func main() {
 
 		testLog.Pass(idx+1, test.name)
 	}
-
-	solution.Export([]int{1, 1, 1, 1, 1}, 3)
 }
