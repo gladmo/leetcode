@@ -39,15 +39,6 @@ var baseCmd = &cobra.Command{
 			info.Print(withDetail)
 
 			for idx, dir := range info.SaveDir {
-				for _, language := range info.Languages {
-					err = leet.BackupClear{
-						Dir:      dir,
-						Language: language,
-					}.Clear()
-					if err != nil {
-						fmt.Println(err.Error())
-					}
-				}
 
 				if idx > 0 {
 					err = leet.CopyDirectory(info.SaveDir[0], info.SaveDir[idx])
@@ -62,6 +53,16 @@ var baseCmd = &cobra.Command{
 				if err != nil {
 					fmt.Println(err.Error())
 				}
+
+				for _, language := range info.Languages {
+					err = leet.BackupClear{
+						Dir:      dir,
+						Language: language,
+					}.Clear()
+					if err != nil {
+						fmt.Println(err.Error())
+					}
+				}
 			}
 
 		} else {
@@ -70,15 +71,6 @@ var baseCmd = &cobra.Command{
 			for _, title := range titles {
 				info := leet.GetQuestionInfo(title)
 				for idx, dir := range info.SaveDir {
-					for _, language := range info.Languages {
-						err := leet.BackupClear{
-							Dir:      dir,
-							Language: language,
-						}.Clear()
-						if err != nil {
-							fmt.Println(err.Error())
-						}
-					}
 
 					if idx > 0 {
 						err := leet.CopyDirectory(info.SaveDir[0], info.SaveDir[idx])
@@ -92,6 +84,16 @@ var baseCmd = &cobra.Command{
 					}.Backup(override)
 					if err != nil {
 						fmt.Println(err.Error())
+					}
+
+					for _, language := range info.Languages {
+						err := leet.BackupClear{
+							Dir:      dir,
+							Language: language,
+						}.Clear()
+						if err != nil {
+							fmt.Println(err.Error())
+						}
 					}
 				}
 			}

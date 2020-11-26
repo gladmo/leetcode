@@ -54,6 +54,11 @@ func Export() {
 	mainCode := fmt.Sprintf(`package main
 
 import (
+	"context"
+	"fmt"
+	"reflect"
+	"time"
+
 	"github.com/gladmo/leetcode/%s"
 	"github.com/gladmo/leetcode/leet"
 )

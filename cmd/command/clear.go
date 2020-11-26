@@ -43,6 +43,15 @@ var clearCmd = &cobra.Command{
 			info.Print(withDetail)
 
 			for _, dir := range info.SaveDir {
+				if backup {
+					err = leet.BackupClear{
+						Dir: dir,
+					}.Backup(override)
+					if err != nil {
+						fmt.Println(err.Error())
+					}
+				}
+
 				for _, language := range info.Languages {
 					err = leet.BackupClear{
 						Dir:      dir,
@@ -60,20 +69,21 @@ var clearCmd = &cobra.Command{
 			for _, title := range titles {
 				info := leet.GetQuestionInfo(title)
 				for _, dir := range info.SaveDir {
-					for _, language := range info.Languages {
-						err := leet.BackupClear{
-							Dir:      dir,
-							Language: language,
-						}.Clear()
-						if err != nil {
-							fmt.Println(err.Error())
-						}
-					}
 
 					if backup {
 						err = leet.BackupClear{
 							Dir: dir,
 						}.Backup(override)
+						if err != nil {
+							fmt.Println(err.Error())
+						}
+					}
+
+					for _, language := range info.Languages {
+						err := leet.BackupClear{
+							Dir:      dir,
+							Language: language,
+						}.Clear()
 						if err != nil {
 							fmt.Println(err.Error())
 						}

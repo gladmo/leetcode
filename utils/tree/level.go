@@ -1,4 +1,4 @@
-package level_order
+package tree
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 // CreateTree [3,9,20,null,null,15,7]
-func CreateTree(treeStr string) (tree *TreeNode) {
+func CreateTree(treeStr string) (tree *Node) {
 	treeStr = strings.TrimSpace(treeStr)
 	treeStr = strings.TrimPrefix(treeStr, "[")
 	treeStr = strings.TrimSuffix(treeStr, "]")
@@ -16,7 +16,7 @@ func CreateTree(treeStr string) (tree *TreeNode) {
 
 	// var level = 1
 	var rootIndex = 0
-	var treeList []*TreeNode
+	var treeList []*Node
 	for i, val := range item {
 		val = strings.TrimSpace(val)
 
@@ -51,7 +51,7 @@ func CreateTree(treeStr string) (tree *TreeNode) {
 	return
 }
 
-func CreateNode(val string) *TreeNode {
+func CreateNode(val string) *Node {
 	if val == "null" {
 		return nil
 	}
@@ -61,33 +61,33 @@ func CreateNode(val string) *TreeNode {
 		panic(err)
 	}
 
-	return &TreeNode{
+	return &Node{
 		Val: int(value),
 	}
 }
 
-type TreeNode struct {
+type Node struct {
 	Val   int
-	Left  *TreeNode
-	Right *TreeNode
+	Left  *Node
+	Right *Node
 }
 
-func (th *TreeNode) String() string {
+func (th *Node) String() string {
 	return fmt.Sprintf("[%s]", strings.Join(LevelOrder(th), ","))
 }
 
-func (th *TreeNode) LevelOrder() [][]int {
+func (th *Node) LevelOrder() [][]int {
 	var res [][]int
 	if th == nil {
 		return res
 	}
 
-	queue := []*TreeNode{th}
+	queue := []*Node{th}
 
 	for i := 0; len(queue) > 0; i++ {
 		res = append(res, []int{})
 
-		var tmp []*TreeNode
+		var tmp []*Node
 
 		for j := 0; j < len(queue); j++ {
 			node := queue[j]
@@ -108,17 +108,17 @@ func (th *TreeNode) LevelOrder() [][]int {
 	return res
 }
 
-func LevelOrder(root *TreeNode) []string {
+func LevelOrder(root *Node) []string {
 	var res []string
 	if root == nil {
 		return res
 	}
 
-	queue := []*TreeNode{root}
+	queue := []*Node{root}
 
 	for i := 0; len(queue) > 0; i++ {
 
-		temp := []*TreeNode{}
+		temp := []*Node{}
 		for j := 0; j < len(queue); j++ {
 			node := queue[j]
 
