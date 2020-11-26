@@ -1,5 +1,5 @@
 # leetcode
-leetcode 本地化刷题/测试/上传
+leetcode 本地化题库，可本地刷题/测试/调试
 
 在线执行 golang 代码跑算法，可以使用
 [Golang 在线代码执行](https://runcode.6cm.co/go): https://runcode.6cm.co/go
