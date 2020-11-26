@@ -114,8 +114,9 @@ Usage:
   leetcode [command]
 
 Available Commands:
-  base        clear & replace all question use you specified
-  clear       set questions to default
+  backup      backup you complete questions to solutions
+  base        clear & replace all question use you specified (backup all unbanked)
+  clear       set questions to default (backup all unbanked)
   get         get leet question from leetcode-cn.com
   help        Help about any command
   info        print leet question info
@@ -177,6 +178,6 @@ A: 首先感谢你对项目的支持。
 ```
 
 ## TODO
-- [ ] leetcode backup 命令
+- [x] leetcode backup 命令
 - [ ] leetcode login
 - [ ] leetcode publish

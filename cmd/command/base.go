@@ -12,7 +12,7 @@ import (
 
 var baseCmd = &cobra.Command{
 	Use:   "base [question_id|leetcode_url]",
-	Short: "clear & replace all question use you specified",
+	Short: "clear & replace all question use you specified (backup all unbanked)",
 	Long:  "恢复所有问题为默认状态，并将 serial 目录的所有问题覆盖到 tag 目录下",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {
@@ -20,6 +20,11 @@ var baseCmd = &cobra.Command{
 			cmd.Help()
 			os.Exit(1)
 			return
+		}
+
+		override, err := cmd.PersistentFlags().GetBool("override-backup")
+		if err != nil {
+			fmt.Println(err.Error())
 		}
 
 		if len(args) == 1 {
@@ -35,7 +40,7 @@ var baseCmd = &cobra.Command{
 
 			for idx, dir := range info.SaveDir {
 				for _, language := range info.Languages {
-					err = leet.ToBeClear{
+					err = leet.BackupClear{
 						Dir:      dir,
 						Language: language,
 					}.Clear()
@@ -50,6 +55,13 @@ var baseCmd = &cobra.Command{
 						fmt.Println(err.Error())
 					}
 				}
+
+				err = leet.BackupClear{
+					Dir: dir,
+				}.Backup(override)
+				if err != nil {
+					fmt.Println(err.Error())
+				}
 			}
 
 		} else {
@@ -59,7 +71,7 @@ var baseCmd = &cobra.Command{
 				info := leet.GetQuestionInfo(title)
 				for idx, dir := range info.SaveDir {
 					for _, language := range info.Languages {
-						err := leet.ToBeClear{
+						err := leet.BackupClear{
 							Dir:      dir,
 							Language: language,
 						}.Clear()
@@ -74,6 +86,13 @@ var baseCmd = &cobra.Command{
 							fmt.Println(err.Error())
 						}
 					}
+
+					err = leet.BackupClear{
+						Dir: dir,
+					}.Backup(override)
+					if err != nil {
+						fmt.Println(err.Error())
+					}
 				}
 			}
 		}
@@ -81,5 +100,6 @@ var baseCmd = &cobra.Command{
 }
 
 func init() {
+	baseCmd.PersistentFlags().Bool("override-backup", false, "override-backup")
 	baseCmd.PersistentFlags().Bool("with-detail", false, "with-detail")
 }

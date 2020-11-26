@@ -7,15 +7,27 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"syscall"
 )
 
-type ToBeClear struct {
+type BackupClear struct {
 	Dir      string `json:"dir"`
 	Language string `json:"language"`
 }
 
-func (th ToBeClear) Clear() (err error) {
+func (th BackupClear) Backup(override bool) error {
+	solutionsDir := strings.Replace(th.Dir, "questions", "solutions", 1)
+
+	if f, err := os.Stat(solutionsDir); err == nil && f.IsDir() && !override {
+		err = fmt.Errorf("%s 已经备份, 使用 `--override-backup` 强制备份", solutionsDir)
+		return err
+	}
+
+	return CopyDirectory(th.Dir, solutionsDir)
+}
+
+func (th BackupClear) Clear() (err error) {
 	switch th.Language {
 	case "golang":
 		return GolangClear(th.Dir)

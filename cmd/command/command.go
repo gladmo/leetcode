@@ -17,7 +17,7 @@ var cmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(versionCmd, getCmd, clearCmd, infoCmd, testCmd, baseCmd)
+	cmd.AddCommand(versionCmd, getCmd, clearCmd, infoCmd, testCmd, baseCmd, backupCmd)
 }
 
 var versionCmd = &cobra.Command{
