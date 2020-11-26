@@ -111,14 +111,16 @@ func main() {
 
 		got := solution.Export(test.input)
 		if !reflect.DeepEqual(test.want, got) {
-			testLog.Fail(idx+1, test.name, fmt.Sprintf("want: %v, got %v.", test.want, got))
+			testLog.Fail(idx+1, test.name, fmt.Sprintf(%s))
 			continue
 		}
 
 		testLog.Pass(idx+1, test.name)
 	}
 }
-`, solutionDir, th.SampleTestCase)
+`,
+		solutionDir, th.SampleTestCase,
+		`"want: %v, got %v.", test.want, got`)
 
 	err = ioutil.WriteFile(path.Join(baseDir, "main.go"), []byte(mainCode), 0755)
 	if err != nil {
