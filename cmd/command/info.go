@@ -12,7 +12,7 @@ import (
 
 var infoCmd = &cobra.Command{
 	Use:   "info question_id|leetcode_url",
-	Short: "print leet question info",
+	Short: "print leetcode question info",
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if len(args) != 1 {

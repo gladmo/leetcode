@@ -53,6 +53,11 @@ const (
 	cacheDuration = time.Hour * 24
 )
 
+// Parse ...
+// param: 222
+// param: https://leetcode-cn.com/problems/k-th-symbol-in-grammar
+// param: https://leetcode-cn.com/problems/k-th-symbol-in-grammar/solution/
+// param: leetcode-cn.com/problems/k-th-symbol-in-grammar
 func Parse(param string) string {
 	if match, err := regexp.MatchString(`\d+`, param); err == nil && match {
 		stat, err := ProblemID2name(param)
@@ -61,6 +66,14 @@ func Parse(param string) string {
 		}
 	}
 
+	return ParseFromURL(param)
+}
+
+// ParseFromURL
+// param: https://leetcode-cn.com/problems/k-th-symbol-in-grammar
+// param: https://leetcode-cn.com/problems/k-th-symbol-in-grammar/solution/
+// param: leetcode-cn.com/problems/k-th-symbol-in-grammar
+func ParseFromURL(param string) string {
 	if strings.HasPrefix(param, "http") ||
 		strings.HasPrefix(param, "leetcode-cn.com") {
 
@@ -68,13 +81,19 @@ func Parse(param string) string {
 
 		result := re.FindStringSubmatch(param)
 		if len(result) == 2 {
-			return strings.Trim(result[1], "/")
+			result := strings.Trim(result[1], "/")
+			ss := strings.Split(result, "/")
+			if len(ss) == 2 {
+				result = ss[0]
+			}
+			return result
 		}
 	}
 
 	return ""
 }
 
+// ProblemID2name return problem info
 func ProblemID2name(id string) (stats QuestionStats, err error) {
 	allProblemsDir := path.Join("questions", "all_problems.json")
 	// 文件是否存在 / 结果是否过期
