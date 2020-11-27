@@ -13,6 +13,9 @@ func CreateTree(treeStr string) (tree *Node) {
 	treeStr = strings.TrimSuffix(treeStr, "]")
 
 	item := strings.Split(treeStr, ",")
+	if len(item) == 1 && item[0] == "" {
+		return
+	}
 
 	// var level = 1
 	var rootIndex = 0
