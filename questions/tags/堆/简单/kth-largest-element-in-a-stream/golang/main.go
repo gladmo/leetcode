@@ -1,73 +1,71 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"reflect"
-	"time"
 
-	"github.com/gladmo/leetcode/questions/tags/堆/简单/kth-largest-element-in-a-stream/golang/solution"
 	"github.com/gladmo/leetcode/leet"
+	"github.com/gladmo/leetcode/questions/serial/简单/789/golang/solution"
 )
 
 func main() {
-	/*
-     
-	["KthLargest","add","add","add","add","add"]
-[[3,[4,5,8,2]],[3],[5],[10],[9],[4]]
 
-    */
-
-	tests := []struct {
-		name  string
-		input [][]int
-		want  bool
-	}{
-		{
-			name: "test-[[1],[2],[3],[]]",
-			input: [][]int{
-				{1},
-				{2},
-				{3},
-				{},
-			},
-			want: true,
-		},
-		{
-			name: "test-[[1,3],[3,0,1],[2],[0]]",
-			input: [][]int{
-				{1, 3},
-				{3, 0, 1},
-				{2},
-				{0},
-			},
-			want: false,
-		},
-	}
-
-	testLog := leet.NewTestLog(len(tests))
+	testLog := leet.NewTestLog(5)
 	defer testLog.Render()
 
-	timeoutDuration := time.Second * 2
+	idx := 1
 
-	for idx, test := range tests {
-		// 超时检测
-		timeout := leet.Timeout(timeoutDuration, func(ctx context.Context, cancel context.CancelFunc) {
-			solution.Export(test.input)
-			cancel()
-		})
-
-		if timeout {
-			testLog.Fail(idx+1, test.name, "timeout")
-			continue
-		}
-
-		got := solution.Export(test.input)
-		if !reflect.DeepEqual(test.want, got) {
-			testLog.Fail(idx+1, test.name, fmt.Sprintf("want: %v, got %v.", test.want, got))
-			continue
-		}
-
-		testLog.Pass(idx+1, test.name)
+	kth := solution.Constructor(3, []int{4, 5, 8, 2})
+	got := kth.Add(3)
+	want := 4
+	if got != want {
+		testLog.Fail(idx, fmt.Sprintf("kth-largest-%v", want), fmt.Sprintf("want: %v, got %v.", want, got))
+	} else {
+		testLog.Pass(idx, fmt.Sprintf("kth-largest-%v", want))
 	}
+	idx++
+
+	got = kth.Add(5)
+	want = 5
+	if got != want {
+		testLog.Fail(idx, fmt.Sprintf("kth-largest-%v", want), fmt.Sprintf("want: %v, got %v.", want, got))
+	} else {
+		testLog.Pass(idx, fmt.Sprintf("kth-largest-%v", want))
+	}
+	idx++
+
+	got = kth.Add(10)
+	want = 5
+	if got != want {
+		testLog.Fail(idx, fmt.Sprintf("kth-largest-%v", want), fmt.Sprintf("want: %v, got %v.", want, got))
+	} else {
+		testLog.Pass(idx, fmt.Sprintf("kth-largest-%v", want))
+	}
+	idx++
+
+	got = kth.Add(9)
+	want = 8
+	if got != want {
+		testLog.Fail(idx, fmt.Sprintf("kth-largest-%v", want), fmt.Sprintf("want: %v, got %v.", want, got))
+	} else {
+		testLog.Pass(idx, fmt.Sprintf("kth-largest-%v", want))
+	}
+	idx++
+
+	got = kth.Add(4)
+	want = 8
+	if got != want {
+		testLog.Fail(idx, fmt.Sprintf("kth-largest-%v", want), fmt.Sprintf("want: %v, got %v.", want, got))
+	} else {
+		testLog.Pass(idx, fmt.Sprintf("kth-largest-%v", want))
+	}
+	idx++
+
+	// test 2
+	kth = solution.Constructor(1, []int{})
+	got = kth.Add(-3)
+	got = kth.Add(-2)
+	got = kth.Add(-4)
+	got = kth.Add(0)
+	got = kth.Add(4)
+
 }
