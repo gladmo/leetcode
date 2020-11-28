@@ -60,7 +60,12 @@ const (
 // param: leetcode-cn.com/problems/k-th-symbol-in-grammar
 func Parse(param string) string {
 	if match, err := regexp.MatchString(`\d+`, param); err == nil && match {
-		stat, err := ProblemID2name(param)
+		stat, err := ProblemID2name(param, true)
+		if err == nil {
+			return stat.QuestionTitleSlug
+		}
+
+		stat, err = ProblemID2name(param, false)
 		if err == nil {
 			return stat.QuestionTitleSlug
 		}
@@ -94,13 +99,16 @@ func ParseFromURL(param string) string {
 }
 
 // ProblemID2name return problem info
-func ProblemID2name(id string) (stats QuestionStats, err error) {
+func ProblemID2name(id string, cache bool) (stats QuestionStats, err error) {
 	allProblemsDir := path.Join("questions", "all_problems.json")
-	// 文件是否存在 / 结果是否过期
-	f, err := os.Stat(allProblemsDir)
 
-	if err == nil && !f.IsDir() && f.ModTime().After(time.Now().Add(-cacheDuration)) {
-		return problemID2name(id)
+	if cache {
+		// 文件是否存在 / 结果是否过期
+		f, err := os.Stat(allProblemsDir)
+
+		if err == nil && !f.IsDir() && f.ModTime().After(time.Now().Add(-cacheDuration)) {
+			return problemID2name(id)
+		}
 	}
 
 	allProblemsResult, err := allProblems()
