@@ -7,32 +7,45 @@ import (
 	"time"
 
 	"github.com/gladmo/leetcode/leet"
-	"github.com/gladmo/leetcode/questions/serial/简单/1791/golang/solution"
+	"github.com/gladmo/leetcode/questions/serial/简单/724/golang/solution"
 )
 
 func main() {
+	/*
+
+		[1,7,3,6,5,6]
+
+	*/
 
 	tests := []struct {
-		name  string
-		input [][]int
-		want  int
+		name   string
+		input1 []int
+		want   int
 	}{
 		{
-			name: "test-6",
-			input: [][]int{
-				{1, 2, 3},
-				{3, 2, 1},
-			},
-			want: 6,
+			name:   "test-[1, 7, 3, 6, 5, 6]",
+			input1: []int{1, 7, 3, 6, 5, 6},
+			want:   3,
 		},
 		{
-			name: "test-10",
-			input: [][]int{
-				{1, 5},
-				{7, 3},
-				{3, 5},
-			},
-			want: 10,
+			name:   "test-[1, 2, 3]",
+			input1: []int{1, 2, 3},
+			want:   -1,
+		},
+		{
+			name:   "test-[1, 7, 3, 7, 6, 5, 6, 7]",
+			input1: []int{1, 7, 3, 7, 6, 5, 6, 7},
+			want:   4,
+		},
+		{
+			name:   "test-[]",
+			input1: []int{},
+			want:   -1,
+		},
+		{
+			name:   "test-[-1,-1,-1,-1,-1,-1]",
+			input1: []int{-1, -1, -1, -1, -1, -1},
+			want:   -1,
 		},
 	}
 
@@ -44,7 +57,7 @@ func main() {
 	for idx, test := range tests {
 		// 超时检测
 		timeout := leet.Timeout(timeoutDuration, func(ctx context.Context, cancel context.CancelFunc) {
-			solution.Export(test.input)
+			solution.Export(test.input1)
 			cancel()
 		})
 
@@ -53,7 +66,7 @@ func main() {
 			continue
 		}
 
-		got := solution.Export(test.input)
+		got := solution.Export(test.input1)
 		if !reflect.DeepEqual(test.want, got) {
 			testLog.Fail(idx+1, test.name, fmt.Sprintf("want: %v, got %v.", test.want, got))
 			continue
