@@ -58,7 +58,7 @@ func main() {
 			name:   "test-[1,4,6,7,8,9]-6",
 			input1: []int{1, 4, 6, 7, 8, 9},
 			input2: 6,
-			want:   1,
+			want:   2,
 		},
 	}
 
