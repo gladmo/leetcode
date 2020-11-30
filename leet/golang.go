@@ -136,7 +136,7 @@ func parseGoCode(code string) (newCode string, ok bool) {
 	if len(strings.TrimSpace(comment)) > 0 {
 		typeIndex := strings.Index(code, `type`)
 		commentRightParentheses := strings.Index(code, `}`)
-		if typeIndex < commentRightParentheses {
+		if typeIndex != -1 && typeIndex < commentRightParentheses {
 			sc := comment[typeIndex:commentRightParentheses]
 			for _, c := range strings.Split(sc, "\n") {
 				structCode += "\n" + strings.Replace(strings.TrimSpace(c), "*", "", 1)
