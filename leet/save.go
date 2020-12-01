@@ -26,6 +26,7 @@ func (th *Localization) Save(override bool) {
 			continue
 		}
 
+		// todo 图片不允许外链时，下载图片到本地
 		err = ioutil.WriteFile(
 			path.Join(dir, "README.md"),
 			[]byte(th.Question),
