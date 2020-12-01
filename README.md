@@ -86,7 +86,7 @@ A: 首先，如果你使用 golang 刷题时，按题号检索时， questions/s
 Q: 我想贡献代码，我应该怎么做？
 A: 首先感谢你对项目的支持。
 1. 现有问题 markdown 或者测试用例修改
-现有代码修改 question.md(问题 markdown 文件) 或 main.go(测试用例)，
+已有问题文件夹下的 README.md(问题 markdown 文件) 或问题下的golang文件夹中的 main.go(测试用例)，
 提交前使用 leetcode clear 将 solution 代码复原，！！！这个操作会将 serial 目录下的所有 solution 
 目录下的代码恢复到与 leetcode-cn.com 提供的代码片断一致（这么做的目录是为了给刷题者创建一个原生的刷题环境，
 而且大家写的代码在 solution 也会反复覆盖）
@@ -163,9 +163,9 @@ Use "leetcode [command] --help" for more information about a command.
 
 ### 如果你是一名贡献者
 ```shell script
-A: 首先感谢你对项目的支持。
+首先感谢你对项目的支持。
 1. 现有问题 markdown 或者测试用例修改
-现有代码修改 question.md(问题 markdown 文件) 或 main.go(测试用例)，
+已有问题文件夹下的 README.md(问题 markdown 文件) 或问题下的golang文件夹中的 main.go(测试用例)，
 提交前使用 leetcode clear 将 solution 代码复原，！！！这个操作会将 serial 目录下的所有 solution 
 目录下的代码恢复到与 leetcode-cn.com 提供的代码片断一致（这么做的目录是为了给刷题者创建一个原生的刷题环境，
 而且大家写的代码在 solution 也会反复覆盖）

@@ -27,7 +27,7 @@ func (th *Localization) Save(override bool) {
 		}
 
 		err = ioutil.WriteFile(
-			path.Join(dir, "question.md"),
+			path.Join(dir, "README.md"),
 			[]byte(th.Question),
 			0755)
 		if err != nil {
