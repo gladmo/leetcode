@@ -24,7 +24,12 @@ func (th BackupClear) Backup(override bool) error {
 		return err
 	}
 
-	return CopyDirectory(th.Dir, solutionsDir)
+	err := CopyDirectory(th.Dir, solutionsDir)
+	if err != nil {
+		panic(err)
+	}
+
+	return err
 }
 
 func (th BackupClear) Clear() (err error) {
@@ -73,6 +78,9 @@ func CopyDirectory(scrDir, dest string) error {
 	for _, entry := range entries {
 		sourcePath := filepath.Join(scrDir, entry.Name())
 		destPath := filepath.Join(dest, entry.Name())
+		if err := CreateIfNotExists(filepath.Dir(destPath), 0755); err != nil {
+			return err
+		}
 
 		fileInfo, err := os.Stat(sourcePath)
 		if err != nil {
