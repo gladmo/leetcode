@@ -42,6 +42,11 @@ func main() {
 			input: []int{0, 0, 1, 0, 3, 12, 0, 1, 0, 0, 0},
 			want:  []int{1, 3, 12, 1, 0, 0, 0, 0, 0, 0, 0},
 		},
+		{
+			name:  "test-[1,2]",
+			input: []int{1, 2},
+			want:  []int{1, 2},
+		},
 	}
 
 	testLog := leet.NewTestLog(len(tests))

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gladmo/leetcode/leet"
-	"github.com/gladmo/leetcode/questions/serial/简单/283/golang/solution"
+	"github.com/gladmo/leetcode/questions/serial/简单/66/golang/solution"
 )
 
 func main() {
@@ -18,34 +18,29 @@ func main() {
 		want  []int
 	}{
 		{
-			name:  "test-[0]",
-			input: []int{0},
-			want:  []int{0},
+			name:  "test-[1,2,3]",
+			input: []int{1, 2, 3},
+			want:  []int{1, 2, 4},
 		},
 		{
-			name:  "test-[1]",
-			input: []int{1},
-			want:  []int{1},
-		},
-		{
-			name:  "test-[0,1]",
-			input: []int{0, 1},
+			name:  "test-[9]",
+			input: []int{9},
 			want:  []int{1, 0},
 		},
 		{
-			name:  "test-[0,1,0,3,12]",
-			input: []int{0, 1, 0, 3, 12},
-			want:  []int{1, 3, 12, 0, 0},
+			name:  "test-[1,9]",
+			input: []int{1, 9},
+			want:  []int{2, 0},
 		},
 		{
-			name:  "test-[0,0,1,0,3,12,0,1,0,0,0]",
-			input: []int{0, 0, 1, 0, 3, 12, 0, 1, 0, 0, 0},
-			want:  []int{1, 3, 12, 1, 0, 0, 0, 0, 0, 0, 0},
+			name:  "test-[9,9,9,9,9]",
+			input: []int{9, 9, 9, 9, 9},
+			want:  []int{1, 0, 0, 0, 0, 0},
 		},
 		{
-			name:  "test-[1,2]",
-			input: []int{1, 2},
-			want:  []int{1, 2},
+			name:  "test-[1,9,9]",
+			input: []int{1, 9, 9},
+			want:  []int{2, 0, 0},
 		},
 	}
 
@@ -66,8 +61,7 @@ func main() {
 			continue
 		}
 
-		solution.Export(test.input)
-		got := test.input
+		got := solution.Export(test.input)
 		if !reflect.DeepEqual(test.want, got) {
 			testLog.Fail(idx+1, test.name, fmt.Sprintf("want: %v, got %v.", test.want, got))
 			continue
