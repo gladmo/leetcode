@@ -36,6 +36,12 @@ func main() {
 			input2: "car",
 			want:   false,
 		},
+		{
+			name:   "test-a-ab",
+			input1: "a",
+			input2: "ab",
+			want:   false,
+		},
 	}
 
 	testLog := leet.NewTestLog(len(tests))
