@@ -28,23 +28,4 @@ func Export(head *ListNode) *ListNode {
  */
 func swapPairs(head *ListNode) *ListNode {
 
-	var helper func(node *ListNode)
-
-	helper = func(node *ListNode) {
-		if node == nil {
-			return
-		}
-
-		if node.Next != nil {
-			node.Val, node.Next.Val = node.Next.Val, node.Val
-
-			if node.Next.Next != nil {
-				helper(node.Next.Next)
-			}
-		}
-	}
-
-	helper(head)
-
-	return head
 }

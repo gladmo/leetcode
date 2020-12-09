@@ -1,7 +1,3 @@
-# github.com/JohannesKaufmann/html-to-markdown v1.2.0
-## explicit
-# github.com/PuerkitoBio/goquery v1.6.0
-## explicit
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
 # github.com/lunny/html2md v0.0.0-20181018071239-7d234de44546

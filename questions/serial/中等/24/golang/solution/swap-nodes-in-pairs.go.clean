@@ -1,10 +1,14 @@
 package solution
 
+import (
+	"github.com/gladmo/leetcode/utils/list"
+)
 
-type ListNode struct {
-     Val int
-     Next *ListNode
-}
+// type ListNode struct {
+// 	Val  int
+// 	Next *ListNode
+// }
+type ListNode = list.Node
 
 func Export(head *ListNode) *ListNode {
 	return swapPairs(head)
