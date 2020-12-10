@@ -1,5 +1,9 @@
 package solution
 
+import (
+	"github.com/gladmo/leetcode/utils/list"
+)
+
 // type ListNode struct {
 // 	Val  int
 // 	Next *ListNode
@@ -10,7 +14,6 @@ type ListNode = list.Node
 func Export(node *ListNode) {
 	deleteNode(node)
 }
-
 
 /****************************************************/
 /******** 以下为 Leetcode 示例部分（提交PR请还原） *******/

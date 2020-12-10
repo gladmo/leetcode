@@ -11,14 +11,6 @@ import (
 )
 
 func main() {
-	/*
-
-			[1,2,3,0,0,0]
-		3
-		[2,5,6]
-		3
-
-	*/
 
 	tests := []struct {
 		name   string
@@ -29,12 +21,28 @@ func main() {
 		want   []int
 	}{
 		{
+			name:   "test-[4,5,6,0,0,0]-3-[1,2,3]-3",
+			input1: []int{4, 5, 6, 0, 0, 0},
+			input2: 3,
+			input3: []int{1, 2, 3},
+			input4: 3,
+			want:   []int{1, 2, 3, 4, 5, 6},
+		},
+		{
 			name:   "test-[1,2,3]-3-[2,5,6]-3",
 			input1: []int{1, 2, 3, 0, 0, 0},
 			input2: 3,
 			input3: []int{2, 5, 6},
 			input4: 3,
 			want:   []int{1, 2, 2, 3, 5, 6},
+		},
+		{
+			name:   "test-[1,2,4,5,6,0]-5-[3]-1",
+			input1: []int{1, 2, 4, 5, 6, 0},
+			input2: 5,
+			input3: []int{3},
+			input4: 1,
+			want:   []int{1, 2, 3, 4, 5, 6},
 		},
 	}
 
