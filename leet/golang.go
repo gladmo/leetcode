@@ -20,6 +20,14 @@ func (th SaveOption) golang() (err error) {
 	if !ok {
 		code = `
 func Export() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Panic:", r)
+			fmt.Println()
+			debug.PrintStack()
+			os.Exit(0)
+		}
+	}()
 
 }`
 	}
@@ -94,8 +102,9 @@ func main() {
 
 	for idx, test := range tests {
 		// 超时检测
+		got := test.want
 		timeout := leet.Timeout(timeoutDuration, func(ctx context.Context, cancel context.CancelFunc) {
-			solution.Export(test.input)
+			got = solution.Export(test.input)
 			cancel()
 		})
 
@@ -104,7 +113,6 @@ func main() {
 			continue
 		}
 
-		got := solution.Export(test.input)
 		if !reflect.DeepEqual(test.want, got) {
 			testLog.Fail(idx+1, test.name, fmt.Sprintf(%s))
 			continue
@@ -176,7 +184,27 @@ func parseGoCode(code string) (newCode string, ok bool) {
 		exportFunction = fmt.Sprintf(`return %s`, exportFunction)
 	}
 
-	code = structCode + code[:leftCurly+2] + "\t" + exportFunction + code[leftCurly+2:]
+	recoverFunc := fmt.Sprintf(`defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Params: ", %s)
+			fmt.Println("Panic:", r)
+			fmt.Println()
+			debug.PrintStack()
+			os.Exit(0)
+		}
+	}()
+
+`, strings.Join(params, ", "))
+
+	importCode := `import (
+	"fmt"
+	"os"
+	"runtime/debug"
+)
+
+`
+
+	code = importCode + structCode + code[:leftCurly+2] + recoverFunc + "\t" + exportFunction + code[leftCurly+2:]
 
 	newCode = strings.Replace(code, funcName, "Export", 1)
 	return
