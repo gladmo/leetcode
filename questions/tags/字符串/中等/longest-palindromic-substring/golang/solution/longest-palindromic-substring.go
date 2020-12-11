@@ -1,6 +1,5 @@
 package solution
 
-
 import (
 	"fmt"
 	"os"
@@ -8,7 +7,6 @@ import (
 )
 
 func Export(s string) string {
-	
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Params: ", s)
@@ -18,7 +16,8 @@ func Export(s string) string {
 			os.Exit(0)
 		}
 	}()
-return longestPalindrome(s)
+
+	return longestPalindrome(s)
 }
 
 /****************************************************/

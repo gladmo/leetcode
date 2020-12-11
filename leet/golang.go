@@ -204,7 +204,10 @@ func parseGoCode(code string) (newCode string, ok bool) {
 
 `
 
-	code = importCode + structCode + code[:leftCurly+2] + recoverFunc + "\t" + exportFunction + code[leftCurly+2:]
+	code = importCode + structCode + code[:leftCurly+2] +
+		"\t" + recoverFunc +
+		"\t" + exportFunction +
+		code[leftCurly+2:]
 
 	newCode = strings.Replace(code, funcName, "Export", 1)
 	return

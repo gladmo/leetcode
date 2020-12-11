@@ -3,34 +3,34 @@ package main
 import (
 	"context"
 	"fmt"
-	"reflect"
+	"strings"
 	"time"
 
-	"github.com/gladmo/leetcode/questions/tags/字符串/中等/longest-palindromic-substring/golang/solution"
 	"github.com/gladmo/leetcode/leet"
+	"github.com/gladmo/leetcode/questions/serial/中等/5/golang/solution"
 )
 
 func main() {
 	/*
-     
-	"babad"
 
-    */
+		"babad"
+
+	*/
 
 	tests := []struct {
 		name  string
-		input [][]int
-		want  bool
+		input string
+		want  []string
 	}{
 		{
-			name: "test-[[1],[2],[3],[]]",
-			input: [][]int{
-				{1},
-				{2},
-				{3},
-				{},
-			},
-			want: true,
+			name:  "test-babad",
+			input: "babad",
+			want:  []string{"aba", "bab"},
+		},
+		{
+			name:  "test-cbbd",
+			input: "cbbd",
+			want:  []string{"bb"},
 		},
 	}
 
@@ -41,7 +41,7 @@ func main() {
 
 	for idx, test := range tests {
 		// 超时检测
-		got := test.want
+		got := strings.Join(test.want, ",")
 		timeout := leet.Timeout(timeoutDuration, func(ctx context.Context, cancel context.CancelFunc) {
 			got = solution.Export(test.input)
 			cancel()
@@ -52,7 +52,7 @@ func main() {
 			continue
 		}
 
-		if !reflect.DeepEqual(test.want, got) {
+		if !strings.Contains(strings.Join(test.want, ","), got) {
 			testLog.Fail(idx+1, test.name, fmt.Sprintf("want: %v, got %v.", test.want, got))
 			continue
 		}
