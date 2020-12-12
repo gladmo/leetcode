@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
-	"strings"
 )
 
-func Export(s string) string {
+func Export(haystack string, needle string) int {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("Params: ", s)
+			fmt.Println("Params: ", haystack, needle)
 			fmt.Println("Panic:", r)
 			fmt.Println()
 			debug.PrintStack()
@@ -18,7 +17,7 @@ func Export(s string) string {
 		}
 	}()
 
-	return reverseWords(s)
+	return strStr(haystack, needle)
 }
 
 /****************************************************/
@@ -26,6 +25,6 @@ func Export(s string) string {
 /******** 使用 (./leetcode clear) 初始化所有问题 *******/
 /****************************************************/
 
-func reverseWords(s string) string {
-	strings.Index()
+func strStr(haystack string, needle string) int {
+
 }
