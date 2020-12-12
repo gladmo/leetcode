@@ -6,10 +6,10 @@ import (
 	"runtime/debug"
 )
 
-func Export(s string) string {
+func Export(numbers []int, target int) []int {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("Params: ", s)
+			fmt.Println("Params: ", numbers, target)
 			fmt.Println("Panic:", r)
 			fmt.Println()
 			debug.PrintStack()
@@ -17,7 +17,7 @@ func Export(s string) string {
 		}
 	}()
 
-	return reverseWords(s)
+	return twoSum(numbers, target)
 }
 
 /****************************************************/
@@ -25,6 +25,6 @@ func Export(s string) string {
 /******** 使用 (./leetcode clear) 初始化所有问题 *******/
 /****************************************************/
 
-func reverseWords(s string) string {
+func twoSum(numbers []int, target int) []int {
 
 }
