@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/spf13/cobra"
 
 	"github.com/gladmo/leetcode/leet"
@@ -19,7 +20,7 @@ var solutionCmd = &cobra.Command{
 	Use:       "solution",
 	Short:     "题解管理",
 	Long:      "你测试过的题解都可以被查看，还可以将之前提交的代码检出到问题列表中",
-	ValidArgs: []string{"get", "describe", "code", "checkout", "list"},
+	ValidArgs: []string{"get", "describe", "code", "checkout", "list", "diff"},
 }
 
 func init() {
@@ -27,8 +28,9 @@ func init() {
 		solutionListCmd,
 		solutionGetCmd,
 		solutionDescribeCmd,
-		solutionShowCmd,
+		solutionCodeCmd,
 		solutionCheckoutCmd,
+		solutionDiffCmd,
 	)
 }
 
@@ -104,7 +106,7 @@ var solutionGetCmd = &cobra.Command{
 	},
 }
 
-var solutionShowCmd = &cobra.Command{
+var solutionCodeCmd = &cobra.Command{
 	Use:   "code question_id|leetcode_url [solution_no]",
 	Short: "显示你的题解代码",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -121,10 +123,9 @@ var solutionShowCmd = &cobra.Command{
 		var err error
 		if len(args) == 1 {
 			latest = true
-
 		} else {
 			solutionIndex := strings.TrimSpace(args[1])
-			idx, err := strconv.Atoi(solutionIndex)
+			idx, err = strconv.Atoi(solutionIndex)
 			if err != nil {
 				latest = true
 			}
@@ -174,13 +175,12 @@ var solutionCheckoutCmd = &cobra.Command{
 			panic(err)
 		}
 
-		solution := solutions[idx]
-
 		if idx < 0 || idx >= len(solutions) {
 			idx++
 			fmt.Println(fmt.Sprintf("最大题解数为: %d, 当前输入: %d", len(solutions), idx))
 			return
 		}
+		solution := solutions[idx]
 
 		err = ioutil.WriteFile(solution.SourceDir, []byte(solution.Code), 0755)
 		if err != nil {
@@ -247,5 +247,66 @@ var solutionDescribeCmd = &cobra.Command{
 
 		fmt.Println("代码:")
 		fmt.Println(code)
+	},
+}
+
+var solutionDiffCmd = &cobra.Command{
+	Use:   "diff question_id|leetcode_url solution_no_1 solution_no_2",
+	Short: "比较两次代码的不同之处",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 3 {
+			cmd.Println("参数异常")
+			cmd.Help()
+			os.Exit(1)
+			return
+		}
+
+		titleSlug := leet.Parse(strings.TrimSpace(args[0]))
+		solutionIndex := strings.TrimSpace(args[1])
+		idx, err := strconv.Atoi(solutionIndex)
+		if err != nil {
+			panic(err)
+		}
+		idx--
+
+		solutionIndex2 := strings.TrimSpace(args[2])
+		idx2, err := strconv.Atoi(solutionIndex2)
+		if err != nil {
+			panic(err)
+		}
+		idx2--
+
+		info := leet.GetQuestionInfo(titleSlug)
+		solutions, err := store.GetSolution(info.QuestionID)
+		if err != nil {
+			panic(err)
+		}
+
+		if idx < 0 || idx >= len(solutions) || idx2 < 0 || idx2 >= len(solutions) {
+			idx++
+			fmt.Println(fmt.Sprintf("最大题解数为: %d, 当前输入: %d %d", len(solutions), idx, idx2))
+			return
+		}
+
+		solution1 := solutions[idx]
+		solution2 := solutions[idx2]
+
+		dmp := diffmatchpatch.New()
+
+		diffs := dmp.DiffMain(
+			leet.CustomerCode(solution1.Code),
+			leet.CustomerCode(solution2.Code),
+			true)
+
+		for _, diff := range diffs {
+			switch diff.Type {
+			case diffmatchpatch.DiffDelete:
+				fmt.Print("---")
+			case diffmatchpatch.DiffInsert:
+				fmt.Print("+++")
+			}
+
+			fmt.Print(diff.Text)
+		}
 	},
 }

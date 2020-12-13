@@ -11,6 +11,9 @@ github.com/mattn/go-runewidth
 # github.com/olekukonko/tablewriter v0.0.4
 ## explicit
 github.com/olekukonko/tablewriter
+# github.com/sergi/go-diff v1.1.0
+## explicit
+github.com/sergi/go-diff/diffmatchpatch
 # github.com/spf13/cobra v1.1.1
 ## explicit
 github.com/spf13/cobra
