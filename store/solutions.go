@@ -51,6 +51,7 @@ func NewSolution(questionID, lang, sourceDir, code, result, evaluation, remark s
 		Evaluation:  evaluation,
 		Remark:      remark,
 		CreatedAt:   time.Now(),
+		Times:       1,
 	}
 }
 

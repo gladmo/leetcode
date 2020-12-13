@@ -56,8 +56,9 @@ func main() {
 
 	for idx, test := range tests {
 		// 超时检测
+		got := test.input
 		timeout := leet.Timeout(timeoutDuration, func(ctx context.Context, cancel context.CancelFunc) {
-			// solution.Export(test.input)
+			solution.Export(test.input)
 			cancel()
 		})
 
@@ -66,8 +67,6 @@ func main() {
 			continue
 		}
 
-		solution.Export(test.input)
-		got := test.input
 		if !reflect.DeepEqual(test.want, got) {
 			testLog.Fail(idx+1, test.name, fmt.Sprintf("want: %v, got %v.", test.want, got))
 			continue

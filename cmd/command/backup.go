@@ -12,7 +12,7 @@ import (
 
 var backupCmd = &cobra.Command{
 	Use:   "backup [question_id|leetcode_url]",
-	Short: "backup you complete questions to solutions",
+	Short: "[Deprecated]backup you complete questions to solutions",
 	Long:  "将你实现的算法备份到 solutions 目录，贡献代码者此命令很有用",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {
