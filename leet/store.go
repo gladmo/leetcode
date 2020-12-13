@@ -55,6 +55,8 @@ func (th Store) Print(withDetail bool) {
 	// table.Append([]string{"语言列表", strings.Join(th.Languages, ",")})
 	table.Append([]string{"标签", strings.Join(th.Tags, ",")})
 	table.Append([]string{"难度", th.Difficulty})
+	codeLine := fmt.Sprintf("%s/README.md:%d:1", th.SaveDir[0], 1)
+	table.Append([]string{"题目描述", codeLine})
 
 	table.Render()
 
@@ -63,8 +65,8 @@ func (th Store) Print(withDetail bool) {
 	}
 }
 
-func GetQuestionInfo(TitleSlug string) (info Store) {
-	s, ok := store[TitleSlug]
+func GetQuestionInfo(titleSlug string) (info Store) {
+	s, ok := store[titleSlug]
 	if !ok {
 		return
 	}

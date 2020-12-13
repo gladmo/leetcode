@@ -250,3 +250,19 @@ func GolangClear(dir string) (err error) {
 
 	return
 }
+
+const commentStr = `/****************************************************/`
+
+// 返回用户自定义代码部分
+func CustomerCode(code string) string {
+	idx := strings.LastIndex(code, commentStr)
+	idx += len(commentStr)
+	return strings.TrimSpace(code[idx:])
+}
+
+// 返回用户代码起始行
+func CustomerCodeLine(code string) int {
+	idx := strings.LastIndex(code, commentStr)
+
+	return strings.Count(code[:idx], "\n") + 2
+}

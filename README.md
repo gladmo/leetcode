@@ -1,12 +1,12 @@
 # leetcode
-leetcode 本地化题库，可本地刷题/测试/调试
+leetcode 本地化题库，本地刷题/测试/调试/保存回放你所有解答
 
 在线执行 golang 代码跑算法，可以使用
 [Golang 在线代码执行](https://runcode.6cm.co/go): https://runcode.6cm.co/go
 
 本项目只包含问题及原始网站提供的代码片断，想看题解及代码实现的可查看源站题解或者：[LeetCode-Go](https://github.com/halfrost/LeetCode-Go)
 
-本地刷题及单步调试算法是本仓库存在的意义。
+本地刷题及单步调试算法、保留所有题解及查看解答变迁是本仓库存在的意义。
 
 ## Intro
 本仓库是 [`leetcode-cn.com`](https://leetcode-cn.com) 本地化题库，包含本地化测试用例、常用 go 工具包的一个仓库。
@@ -16,12 +16,26 @@ leetcode 本地化题库，可本地刷题/测试/调试
 - leetcode 在线题目本地化 (questions 目录)
 - 本地化测试用例，本地调试 (cmd 目录)
 - 常用刷题 go 语言工具包 (utils 目录)
+- 保存题解，随时查看历史 （./leetcode solution 命令）
 
 ## 须知
 - 抱着怀疑的心态使用测试用例（当然每个测试用例都经过精心测试，但难免会有意外）
 - 每次执行测试时会先运行一次，检测是否会超时，超时默认为2s
 - 当前所有测试用例共用一个运行环境，需考虑算法是否会对此有特殊要求（也就是说，你写的算法块最好是无状态的，注意：全局变量会在每个测试用例间共享）
 - 开始你的算法之旅
+- 所有包含路径的部分在 goland/idea 编辑器控制台可以直接点击跳转到代码，省去找算法目录的过程
+
+## 安装
+```shell script
+git --depth 1 clone https://github.com/gladmo/leetcode.git
+cd leetcode
+go build -o leetcode cmd/leetcode.go
+./leetcode
+
+# or
+go install cmd/leetcode.go
+leetcode
+```
 
 ## 主要功能
 ### 本地化测试
@@ -65,9 +79,99 @@ leetcode 本地化题库，可本地刷题/测试/调试
 +----------+------------------------------+
 | 标签      | 深度优先搜索,广度优先搜索,图     |
 +----------+------------------------------+
-| 难度      | 中等                         |
+| 难度      | medium                         |
 +----------+------------------------------+
 ```
+
+所有你使用 `./leetcode test ...` 测试过的代码，都会保存到当前目录 `solutions.db` 中
+
+可以使用 `./leetcode solution list` 列出所有解答：
+```shell
+./leetcode solution list
+```
+
+得到类似如下输出：
+```
++--------+----------------------+------+--------+----------+------------+------------+
+| 问题ID |         标题         | 难度 | 版本数 | 测试次数 |  首次提交  |  最后提交  |
++--------+----------------------+------+--------+----------+------------+------------+
+|   1786 | 统计一致字符串的数目 | easy |      1 |        0 | 2020-12-13 | 2020-12-13 |
++--------+----------------------+------+--------+----------+------------+------------+
+|    283 | 移动零               | easy |      1 |        0 | 2020-12-13 | 2020-12-13 |
++--------+----------------------+------+--------+----------+------------+------------+
+```
+
+获取某一题下所有测试过的题解：
+```shell
+./leetcode solution get 283
+```
+
+得到类似以下输出:
+```shell
++------+--------+----------+------+--------+------------+------+
+| 序号 |  语言  | 测试次数 | 评价 |  消耗  |  创建时间  | 备注 |
++------+--------+----------+------+--------+------------+------+
+|    1 | golang |        0 | 6/6  | 1.387s | 2020-12-13 |      |
++------+--------+----------+------+--------+------------+------+
+```
+
+查看提交的题解代码部分：
+```shell
+./leetcode solution code 283 1
+```
+
+```shell
+func moveZeroes(nums []int) {
+        var j int
+        for i := 0; i < len(nums); i++ {
+                if nums[i] != 0 {
+                        nums[j], nums[i] = nums[i], nums[j]
+                        j++
+                }
+        }
+}
+```
+
+查看题解详情：
+```shell
+./leetcode solution describe 283 1
+```
+
+```shell
++-------+---------------------------------------------------------------+
+| 编号: |                                                           283 |
++-------+---------------------------------------------------------------+
+| 题目: | 移动零                                                        |
++-------+---------------------------------------------------------------+
+| 难度: | easy                                                          |
++-------+---------------------------------------------------------------+
+| 语言: | golang                                                        |
++-------+---------------------------------------------------------------+
+| 路径: | questions/serial/easy/283/golang/solution/move-zeroes.go:11:1 |
++-------+---------------------------------------------------------------+
+| 时间: | 2020-12-13                                                    |
++-------+---------------------------------------------------------------+
+代码:
+func moveZeroes(nums []int) {
+        var j int
+        for i := 0; i < len(nums); i++ {
+                if nums[i] != 0 {
+                        nums[j], nums[i] = nums[i], nums[j]
+                        j++
+                }
+        }
+}
+```
+
+将代码检出到问题中：
+```shell
+./leetcode solution checkout 283 1
+
+题目: 移动零, 编号: 283, 代码检出成功。
+路径: questions/serial/easy/283/golang/solution/move-zeroes.go:11:1
+```
+
+代码检出后，将会使用历史的题解覆盖当前题目代码，方便回顾之前写算法的过程。
 
 ## Q & A
 ```
@@ -89,6 +193,9 @@ A: 首先，如果你使用 golang 刷题时，按题号检索时， questions/s
 注意在测试的时候，需要使用 (leetcode test --tag [you-choose-tag] ... )
 需要带上 --tag  [you-choose-tag]
 
+Q: Goland 控制台输出的链接太难识别了怎么办？
+A: 可以到 Editor -> Color Scheme -> General -> Hyperlinks -> Reference 调整配色
+
 Q: 我想贡献代码，我应该怎么做？
 A: 首先感谢你对项目的支持。
 1. 现有问题 markdown 或者测试用例修改
@@ -104,15 +211,7 @@ A: 首先感谢你对项目的支持。
 再次感谢！
 ```
 
-## 快速开始
-```shell script
-git --depth 1 clone https://github.com/gladmo/leetcode.git
-cd leetcode
-go build -o leetcode cmd/leetcode.go
-./leetcode
-```
-
-你可以看到如下输出
+### 命令功能简介：
 ```shell script
 leetcode cli
 
@@ -123,10 +222,12 @@ Available Commands:
   backup      backup you complete questions to solutions
   base        clear & replace all question use you specified (backup all unbanked)
   clear       set questions to default (backup all unbanked)
-  get         get leet question from leetcode-cn.com
+  completion  Generate completion script
+  get         get leetcode question from leetcode-cn.com
   help        Help about any command
-  info        print leet question info
-  test        test you code and analyse
+  info        print leetcode question info
+  solution    题解管理
+  test        测试本地代码，保存题解
   version     Print the version number of leetcode cli
 
 Flags:
@@ -163,7 +264,7 @@ Use "leetcode [command] --help" for more information about a command.
 +----------+------------------------------+
 | 标签      | 深度优先搜索,广度优先搜索,图     |
 +----------+-----------------------------+
-| 难度      | 中等                         |
+| 难度      | medium                         |
 +----------+------------------------------+
 ```
 
@@ -184,6 +285,8 @@ Use "leetcode [command] --help" for more information about a command.
 ```
 
 ## TODO
+- [x] leetcode solution 命令，使用测试时保存的所有题解都可以用此命令及其子命令查看
 - [x] leetcode backup 命令
+- [ ] questions 目录下的两个json文件改用 bolt 存储
 - [ ] leetcode login
 - [ ] leetcode publish

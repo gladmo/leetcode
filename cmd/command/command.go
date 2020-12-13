@@ -8,16 +8,33 @@ import (
 )
 
 var (
-	Version = "v1.0.0"
+	Version = "v1.1.0"
 )
 
 var cmd = &cobra.Command{
 	Use:   "leetcode",
 	Short: "leetcode cli",
+	ValidArgs: []string{
+		"backup",
+		"base",
+		"clear",
+		"completion",
+		"get",
+		"help",
+		"info",
+		"solution",
+		"test",
+		"version",
+	},
 }
 
 func init() {
-	cmd.AddCommand(versionCmd, getCmd, clearCmd, infoCmd, testCmd, baseCmd, backupCmd)
+	cmd.AddCommand(
+		versionCmd, getCmd, clearCmd,
+		infoCmd, testCmd, baseCmd, backupCmd,
+		solutionCmd,
+		completionCmd,
+	)
 }
 
 var versionCmd = &cobra.Command{

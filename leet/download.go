@@ -82,15 +82,16 @@ func (th *QuestionDetail) Download(override bool) {
 		tags = append(tags, topicTag.TranslatedName)
 	}
 
-	var difficulty string
-	switch strings.ToLower(th.Data.Question.Difficulty) {
-	case "easy":
-		difficulty = "简单"
-	case "hard":
-		difficulty = "困难"
-	case "medium":
-		difficulty = "中等"
-	}
+	difficulty := strings.ToLower(th.Data.Question.Difficulty)
+	// var difficulty string
+	// switch strings.ToLower(th.Data.Question.Difficulty) {
+	// case "easy":
+	// 	difficulty = "easy"
+	// case "hard":
+	// 	difficulty = "hard"
+	// case "medium":
+	// 	difficulty = "medium"
+	// }
 
 	localization := Localization{
 		TitleSlug:      th.Data.Question.TitleSlug,
