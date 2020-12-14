@@ -11,17 +11,6 @@ import (
 	"github.com/boltdb/bolt"
 )
 
-// 存储用户解答的题目
-var solutions *bolt.DB
-
-func init() {
-	var err error
-	solutions, err = bolt.Open("solutions.db", 0600, nil)
-	if err != nil {
-		panic(err)
-	}
-}
-
 // Solution 解题内容
 type Solution struct {
 	QuestionID  string        `json:"question_id"` // 问题id
@@ -111,7 +100,7 @@ func (th *answer) Tidy() {
 
 // AddSolution 添加解题答案
 func AddSolution(solution Solution) error {
-	return solutions.Update(func(tx *bolt.Tx) error {
+	return private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("solutions"))
 		if err != nil {
 			return err
@@ -145,7 +134,7 @@ type SolutionsList struct {
 }
 
 func ListSolution() (sl []SolutionsList, err error) {
-	err = solutions.View(func(tx *bolt.Tx) error {
+	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
 		var solutionsList SolutionsList
@@ -172,7 +161,7 @@ func ListSolution() (sl []SolutionsList, err error) {
 
 // GetSolution 获取测试过的题解
 func GetSolution(questionID string) (ss []Solution, err error) {
-	err = solutions.View(func(tx *bolt.Tx) error {
+	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
 		res := b.Get([]byte(questionID))
@@ -188,7 +177,7 @@ func GetSolution(questionID string) (ss []Solution, err error) {
 
 // RemoveSolution delete solution
 func RemoveSolution(questionID string) error {
-	return solutions.Update(func(tx *bolt.Tx) error {
+	return private.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
 		return b.Delete([]byte(questionID))
@@ -196,7 +185,7 @@ func RemoveSolution(questionID string) error {
 }
 
 func TidySolution(questionID string) error {
-	return solutions.Update(func(tx *bolt.Tx) error {
+	return private.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
 		key := []byte(questionID)

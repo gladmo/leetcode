@@ -23,6 +23,7 @@ var cmd = &cobra.Command{
 		"help",
 		"info",
 		"solution",
+		"mark",
 		"test",
 		"version",
 	},
@@ -34,6 +35,7 @@ func init() {
 		infoCmd, testCmd, baseCmd, backupCmd,
 		solutionCmd,
 		completionCmd,
+		markCmd,
 	)
 }
 
