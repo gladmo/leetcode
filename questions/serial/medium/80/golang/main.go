@@ -6,31 +6,31 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/gladmo/leetcode/questions/serial/medium/80/golang/solution"
 	"github.com/gladmo/leetcode/leet"
+	"github.com/gladmo/leetcode/questions/serial/medium/80/golang/solution"
 )
 
 func main() {
-	/*
-     
-	[1,1,1,2,2,3]
-
-    */
 
 	tests := []struct {
 		name  string
-		input [][]int
-		want  bool
+		input []int
+		want  int
 	}{
 		{
-			name: "test-[[1],[2],[3],[]]",
-			input: [][]int{
-				{1},
-				{2},
-				{3},
-				{},
-			},
-			want: true,
+			name:  "test-[1,1,1,2,2,3]",
+			input: []int{1, 1, 1, 2, 2, 3},
+			want:  5,
+		},
+		{
+			name:  "test-[0,0,1,1,1,1,2,3,3]",
+			input: []int{0, 0, 1, 1, 1, 1, 2, 3, 3},
+			want:  7,
+		},
+		{
+			name:  "test-[0,0,1,1,1,1,2,3,3,3]",
+			input: []int{0, 0, 1, 1, 1, 1, 2, 3, 3, 3},
+			want:  7,
 		},
 	}
 
