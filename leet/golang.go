@@ -266,3 +266,9 @@ func CustomerCodeLine(code string) int {
 
 	return strings.Count(code[:idx], "\n") + 2
 }
+
+func CustomerCodeLineByFile(dir string) int {
+	b, _ := ioutil.ReadFile(dir)
+
+	return CustomerCodeLine(string(b))
+}

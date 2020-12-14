@@ -200,7 +200,7 @@ var solutionCheckoutCmd = &cobra.Command{
 			info.QuestionID,
 		))
 
-		codeLine := fmt.Sprintf("%s:%d:1", solution.SourceDir, leet.CustomerCodeLine(solution.Code))
+		codeLine := fmt.Sprintf("%s:%d", solution.SourceDir, leet.CustomerCodeLine(solution.Code))
 		fmt.Println(fmt.Sprintf("路径: %s", codeLine))
 	},
 }
@@ -248,7 +248,7 @@ var solutionDescribeCmd = &cobra.Command{
 		table.Append([]string{"题目:", info.TranslatedTitle})
 		table.Append([]string{"难度:", info.Difficulty})
 		table.Append([]string{"语言:", solution.Language})
-		codeLine := fmt.Sprintf("%s:%d:1", solution.SourceDir, leet.CustomerCodeLine(solution.Code))
+		codeLine := fmt.Sprintf("%s:%d", solution.SourceDir, leet.CustomerCodeLine(solution.Code))
 		table.Append([]string{"路径:", codeLine})
 		table.Append([]string{"时间:", solution.CreatedAt.Format(timeFormat)})
 		table.Render()

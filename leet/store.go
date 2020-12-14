@@ -55,8 +55,18 @@ func (th Store) Print(withDetail bool) {
 	// table.Append([]string{"语言列表", strings.Join(th.Languages, ",")})
 	table.Append([]string{"标签", strings.Join(th.Tags, ",")})
 	table.Append([]string{"难度", th.Difficulty})
-	codeLine := fmt.Sprintf("%s/README.md:%d:1", th.SaveDir[0], 1)
+	codeLine := fmt.Sprintf("%s/README.md:2", th.SaveDir[0])
 	table.Append([]string{"题目描述", codeLine})
+	goFileDir := fmt.Sprintf(
+		"%s/golang/solution/%s.go",
+		th.SaveDir[0],
+		th.TitleSlug)
+	goCodeLine := fmt.Sprintf(
+		"%s:%d",
+		goFileDir,
+		CustomerCodeLineByFile(goFileDir),
+	)
+	table.Append([]string{"Go代码", goCodeLine})
 
 	table.Render()
 
