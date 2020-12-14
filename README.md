@@ -196,6 +196,9 @@ A: 首先，如果你使用 golang 刷题时，按题号检索时， questions/s
 Q: Goland 控制台输出的链接太难识别了怎么办？
 A: 可以到 Editor -> Color Scheme -> General -> Hyperlinks -> Reference 调整配色
 
+Q: 为何我的idea控制台中路径不能点击？
+A: 首次get题目时，编辑器还未加载到文件，点一下目录，再试试一次 info 命令即可
+
 Q: 我想贡献代码，我应该怎么做？
 A: 首先感谢你对项目的支持。
 1. 现有问题 markdown 或者测试用例修改
@@ -284,9 +287,16 @@ Use "leetcode [command] --help" for more information about a command.
 再次感谢！
 ```
 
-## TODO
+## Changelog
+### 2020-12-14
+- [x] leetcode mark 命令，可以给问题或者题解设置书签
+  
+### 2020-12-13
 - [x] leetcode solution 命令，使用测试时保存的所有题解都可以用此命令及其子命令查看
 - [x] leetcode backup 命令
+
+## Todo
+- [ ] leetcode search 命令
 - [ ] questions 目录下的两个json文件改用 bolt 存储
 - [ ] leetcode login
 - [ ] leetcode publish
