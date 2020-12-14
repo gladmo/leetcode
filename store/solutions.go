@@ -91,7 +91,9 @@ func (th *answer) Tidy() {
 	var newAnswer answer
 	for _, solution := range *th {
 		tmp := strings.Split(solution.Evaluation, "/")
-		if len(tmp) == 2 && tmp[0] == tmp[1] {
+		if len(tmp) == 2 &&
+			tmp[0] == tmp[1] &&
+			strings.TrimSpace(tmp[0]) != "0" {
 			newAnswer = append(newAnswer, solution)
 		}
 	}
