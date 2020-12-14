@@ -31,6 +31,8 @@ func init() {
 		solutionCodeCmd,
 		solutionCheckoutCmd,
 		solutionDiffCmd,
+		solutionTidyCmd,
+		solutionEmptyCmd,
 	)
 }
 
@@ -47,7 +49,8 @@ var solutionListCmd = &cobra.Command{
 
 		list, err := store.ListSolution()
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 		for _, solution := range list {
 			info := leet.GetQuestionInfo(leet.Parse(solution.QuestionID))
@@ -82,7 +85,8 @@ var solutionGetCmd = &cobra.Command{
 
 		solutions, err := store.GetSolution(info.QuestionID)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)
@@ -139,7 +143,8 @@ var solutionCodeCmd = &cobra.Command{
 
 		solutions, err := store.GetSolution(info.QuestionID)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 		if latest || idx > len(solutions) {
 			idx = len(solutions) - 1
@@ -165,14 +170,16 @@ var solutionCheckoutCmd = &cobra.Command{
 		solutionIndex := strings.TrimSpace(args[1])
 		idx, err := strconv.Atoi(solutionIndex)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 		idx--
 
 		info := leet.GetQuestionInfo(titleSlug)
 		solutions, err := store.GetSolution(info.QuestionID)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 
 		if idx < 0 || idx >= len(solutions) {
@@ -213,7 +220,8 @@ var solutionDescribeCmd = &cobra.Command{
 		solutionIndex := strings.TrimSpace(args[1])
 		idx, err := strconv.Atoi(solutionIndex)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 		// 转为数组索引
 		idx--
@@ -265,21 +273,24 @@ var solutionDiffCmd = &cobra.Command{
 		solutionIndex := strings.TrimSpace(args[1])
 		idx, err := strconv.Atoi(solutionIndex)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 		idx--
 
 		solutionIndex2 := strings.TrimSpace(args[2])
 		idx2, err := strconv.Atoi(solutionIndex2)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 		idx2--
 
 		info := leet.GetQuestionInfo(titleSlug)
 		solutions, err := store.GetSolution(info.QuestionID)
 		if err != nil {
-			panic(err)
+			fmt.Println(err.Error())
+			return
 		}
 
 		if idx < 0 || idx >= len(solutions) || idx2 < 0 || idx2 >= len(solutions) {
@@ -308,5 +319,51 @@ var solutionDiffCmd = &cobra.Command{
 
 			fmt.Print(diff.Text)
 		}
+	},
+}
+
+var solutionTidyCmd = &cobra.Command{
+	Use:   "tidy question_id|leetcode_url solution_no",
+	Short: "清空单个问题所有题解",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 1 {
+			cmd.Println("参数异常")
+			cmd.Help()
+			os.Exit(1)
+			return
+		}
+
+		titleSlug := leet.Parse(strings.TrimSpace(args[0]))
+		info := leet.GetQuestionInfo(titleSlug)
+
+		err := store.TidySolution(info.QuestionID)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		fmt.Println("整理完成")
+	},
+}
+
+var solutionEmptyCmd = &cobra.Command{
+	Use:   "empty question_id|leetcode_url solution_no",
+	Short: "清空单个问题所有题解",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 1 {
+			cmd.Println("参数异常")
+			cmd.Help()
+			os.Exit(1)
+			return
+		}
+
+		titleSlug := leet.Parse(strings.TrimSpace(args[0]))
+		info := leet.GetQuestionInfo(titleSlug)
+
+		err := store.RemoveSolution(info.QuestionID)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		fmt.Println("清空完成")
 	},
 }

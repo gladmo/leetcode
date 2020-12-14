@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/boltdb/bolt"
@@ -48,7 +49,7 @@ func NewSolution(questionID, lang, sourceDir, code, result, evaluation, remark s
 		Code:        code,
 		Result:      result,
 		Consumption: consumption,
-		Evaluation:  evaluation,
+		Evaluation:  strings.TrimSpace(evaluation),
 		Remark:      remark,
 		CreatedAt:   time.Now(),
 		Times:       1,
@@ -95,6 +96,17 @@ func (th answer) LastTime() time.Time {
 func (th answer) Bytes() []byte {
 	b, _ := json.Marshal(th)
 	return b
+}
+
+func (th *answer) Tidy() {
+	var newAnswer answer
+	for _, solution := range *th {
+		tmp := strings.Split(solution.Evaluation, "/")
+		if len(tmp) == 2 && tmp[0] == tmp[1] {
+			newAnswer = append(newAnswer, solution)
+		}
+	}
+	*th = newAnswer
 }
 
 // AddSolution 添加解题答案
@@ -165,11 +177,42 @@ func GetSolution(questionID string) (ss []Solution, err error) {
 
 		res := b.Get([]byte(questionID))
 		if len(res) == 0 {
-			return fmt.Errorf("solution: %s, not found", questionID)
+			return fmt.Errorf("question id: %s solutions not found", questionID)
 		}
 
 		return json.Unmarshal(res, &ss)
 	})
 
 	return
+}
+
+// RemoveSolution delete solution
+func RemoveSolution(questionID string) error {
+	return solutions.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("solutions"))
+
+		return b.Delete([]byte(questionID))
+	})
+}
+
+func TidySolution(questionID string) error {
+	return solutions.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("solutions"))
+
+		key := []byte(questionID)
+		data := b.Get(key)
+		if len(data) == 0 {
+			return nil
+		}
+
+		var ans answer
+		err := json.Unmarshal(data, &ans)
+		if err != nil {
+			return err
+		}
+
+		ans.Tidy()
+
+		return b.Put(key, ans.Bytes())
+	})
 }
