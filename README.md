@@ -288,6 +288,9 @@ Use "leetcode [command] --help" for more information about a command.
 ```
 
 ## Changelog
+### 2020-12-15
+- [x] questions 目录下的两个json文件改用 bolt 存储
+
 ### 2020-12-14
 - [x] leetcode mark 命令，可以给问题或者题解设置书签
   
@@ -297,6 +300,5 @@ Use "leetcode [command] --help" for more information about a command.
 
 ## Todo
 - [ ] leetcode search 命令
-- [ ] questions 目录下的两个json文件改用 bolt 存储
 - [ ] leetcode login
 - [ ] leetcode publish
