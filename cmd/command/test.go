@@ -85,6 +85,7 @@ var testCmd = &cobra.Command{
 			code, _ = format.Source(b)
 		}
 
+		fmt.Println(commandName, strings.Join(commandParams, " "))
 		evaluation := ""
 		t := time.Now()
 		c := exec.Command(commandName, commandParams...)
