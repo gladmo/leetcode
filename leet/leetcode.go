@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
-	"path"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/gladmo/leetcode/store"
 )
 
 const UA = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36`
@@ -60,12 +60,7 @@ const (
 // param: leetcode-cn.com/problems/k-th-symbol-in-grammar
 func Parse(param string) string {
 	if match, err := regexp.MatchString(`\d+`, param); err == nil && match {
-		stat, err := ProblemID2name(param, true)
-		if err == nil {
-			return stat.QuestionTitleSlug
-		}
-
-		stat, err = ProblemID2name(param, false)
+		stat, err := ProblemID2name(param)
 		if err == nil {
 			return stat.QuestionTitleSlug
 		}
@@ -99,15 +94,11 @@ func ParseFromURL(param string) string {
 }
 
 // ProblemID2name return problem info
-func ProblemID2name(id string, cache bool) (stats QuestionStats, err error) {
-	allProblemsDir := path.Join("questions", "all_problems.json")
-
-	if cache {
-		// 文件是否存在 / 结果是否过期
-		f, err := os.Stat(allProblemsDir)
-
-		if err == nil && !f.IsDir() && f.ModTime().After(time.Now().Add(-cacheDuration)) {
-			return problemID2name(id)
+func ProblemID2name(id string) (stats store.QuestionStats, err error) {
+	if ok, err := store.ProblemInfoIsExpire(); err == nil && !ok {
+		stats, err = store.GetProblemsInfo(id)
+		if err == nil {
+			return stats, err
 		}
 	}
 
@@ -116,41 +107,22 @@ func ProblemID2name(id string, cache bool) (stats QuestionStats, err error) {
 		return
 	}
 
-	b, err := json.Marshal(allProblemsResult)
+	var infos []store.QuestionStats
+	for _, pair := range allProblemsResult.StatStatusPairs {
+		infos = append(infos, pair.Stat)
+	}
+
+	err = store.UpdateProblems(infos)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	err = store.ProblemsTTL(time.Now().Add(cacheDuration))
 	if err != nil {
 		return
 	}
 
-	err = ioutil.WriteFile(allProblemsDir, b, 0755)
-	if err != nil {
-		return
-	}
-
-	return problemID2name(id)
-}
-
-func problemID2name(id string) (stats QuestionStats, err error) {
-	allProblemsDir := path.Join("questions", "all_problems.json")
-
-	b, err := ioutil.ReadFile(allProblemsDir)
-	if err != nil {
-		return
-	}
-
-	var apr AllProblemsResult
-	err = json.Unmarshal(b, &apr)
-	if err != nil {
-		return
-	}
-
-	for _, pair := range apr.StatStatusPairs {
-		if fmt.Sprint(pair.Stat.QuestionID) == id {
-			return pair.Stat, nil
-		}
-	}
-
-	err = fmt.Errorf(`problem id: %s,  not found`, id)
-	return
+	return store.GetProblemsInfo(id)
 }
 
 func allProblems() (apr AllProblemsResult, err error) {
@@ -198,8 +170,8 @@ type AllProblemsResult struct {
 	AcMedium        int    `json:"ac_medium"`
 	AcHard          int    `json:"ac_hard"`
 	StatStatusPairs []struct {
-		Stat       QuestionStats `json:"stat"`
-		Status     interface{}   `json:"status"`
+		Stat       store.QuestionStats `json:"stat"`
+		Status     interface{}         `json:"status"`
 		Difficulty struct {
 			Level int `json:"level"`
 		} `json:"difficulty"`
@@ -211,18 +183,6 @@ type AllProblemsResult struct {
 	FrequencyHigh int    `json:"frequency_high"`
 	FrequencyMid  int    `json:"frequency_mid"`
 	CategorySlug  string `json:"category_slug"`
-}
-
-type QuestionStats struct {
-	QuestionID          int    `json:"question_id"`
-	QuestionTitle       string `json:"question__title"`
-	QuestionTitleSlug   string `json:"question__title_slug"`
-	QuestionHide        bool   `json:"question__hide"`
-	TotalAcs            int    `json:"total_acs"`
-	TotalSubmitted      int    `json:"total_submitted"`
-	TotalColumnArticles int    `json:"total_column_articles"`
-	FrontendQuestionID  string `json:"frontend_question_id"`
-	IsNewQuestion       bool   `json:"is_new_question"`
 }
 
 func Fetch(title string) (qd QuestionDetail, err error) {

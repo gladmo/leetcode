@@ -1,66 +1,35 @@
 package leet
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path"
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
+
+	"github.com/gladmo/leetcode/store"
 )
 
-var store = make(map[string]Store)
-var storeFile = path.Join("questions", "store.json")
-
-func init() {
-	updateCache()
-}
-
-func updateCache() (err error) {
-	b, err := ioutil.ReadFile(storeFile)
-	if err != nil {
+func InfoPrint(info store.Store, withDetail bool) {
+	if info.QuestionID == "" {
+		fmt.Println("问题还未下载到本地，请先使用 get 命令下载")
 		return
 	}
-
-	err = json.Unmarshal(b, &store)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-type Store struct {
-	Title           string   `json:"title"`
-	TranslatedTitle string   `json:"translated_title"`
-	QuestionID      string   `json:"question_id"`
-	Languages       []string `json:"language"`
-	Tags            []string `json:"tags"`
-
-	Difficulty string   `json:"difficulty"`
-	SaveDir    []string `json:"save_dir"`
-	TitleSlug  string   `json:"title_slug"`
-	Question   string   `json:"question"`
-}
-
-func (th Store) Print(withDetail bool) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetRowLine(true)
 
-	table.Append([]string{"标题", th.Title})
-	table.Append([]string{"问题ID", th.QuestionID})
-	table.Append([]string{"中文标题", th.TranslatedTitle})
-	// table.Append([]string{"语言列表", strings.Join(th.Languages, ",")})
-	table.Append([]string{"标签", strings.Join(th.Tags, ",")})
-	table.Append([]string{"难度", th.Difficulty})
-	codeLine := fmt.Sprintf("%s/README.md:2", th.SaveDir[0])
+	table.Append([]string{"标题", info.Title})
+	table.Append([]string{"问题ID", info.QuestionID})
+	table.Append([]string{"中文标题", info.TranslatedTitle})
+	// table.Append([]string{"语言列表", strings.Join(info.Languages, ",")})
+	table.Append([]string{"标签", strings.Join(info.Tags, ",")})
+	table.Append([]string{"难度", info.Difficulty})
+	codeLine := fmt.Sprintf("%s/README.md:2", info.SaveDir[0])
 	table.Append([]string{"题目描述", codeLine})
 	goFileDir := fmt.Sprintf(
 		"%s/golang/solution/%s.go",
-		th.SaveDir[0],
-		th.TitleSlug)
+		info.SaveDir[0],
+		info.TitleSlug)
 	goCodeLine := fmt.Sprintf(
 		"%s:%d",
 		goFileDir,
@@ -71,33 +40,38 @@ func (th Store) Print(withDetail bool) {
 	table.Render()
 
 	if withDetail {
-		fmt.Println(th.Question)
+		fmt.Println(info.Question)
 	}
 }
 
-func GetQuestionInfo(titleSlug string) (info Store) {
-	s, ok := store[titleSlug]
-	if !ok {
-		return
+func GetQuestionInfoByID(questionID string) (info store.Store) {
+	var err error
+	info, err = store.QuestionInfo(questionID)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
+	return
+}
 
-	return s
+func GetQuestionInfo(titleSlug string) (info store.Store) {
+	var err error
+	info, err = store.QuestionInfo(titleSlug)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return
 }
 
 func GetAllQuestionTitleSlug() (res []string) {
-	for titleSlug := range store {
-		res = append(res, titleSlug)
+	var err error
+	res, err = store.AllQuestionTitleSlug()
+	if err != nil {
+		fmt.Println(err.Error())
 	}
-
 	return
 }
 
 func UpdateQuestionInfo(que Question, local Localization) {
-	err := updateCache()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
 	var tags []string
 	for _, topicTag := range que.TopicTags {
 		tags = append(tags, topicTag.TranslatedName)
@@ -108,7 +82,7 @@ func UpdateQuestionInfo(que Question, local Localization) {
 		langs = append(langs, lan.LangSlug)
 	}
 
-	info := Store{
+	info := store.Store{
 		Title:           que.Title,
 		TranslatedTitle: que.TranslatedTitle,
 		QuestionID:      local.QuestionID,
@@ -120,14 +94,7 @@ func UpdateQuestionInfo(que Question, local Localization) {
 		Question:        local.Question,
 	}
 
-	store[info.TitleSlug] = info
-	b, err := json.Marshal(store)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
-	err = ioutil.WriteFile(storeFile, b, 0755)
+	err := store.UpdateQuestionInfo(info)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

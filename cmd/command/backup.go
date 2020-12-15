@@ -36,7 +36,7 @@ var backupCmd = &cobra.Command{
 			}
 
 			info := leet.GetQuestionInfo(param)
-			info.Print(withDetail)
+			leet.InfoPrint(info, withDetail)
 
 			for _, dir := range info.SaveDir {
 				err = leet.BackupClear{

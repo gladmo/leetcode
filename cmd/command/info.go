@@ -29,7 +29,8 @@ var infoCmd = &cobra.Command{
 			fmt.Println(err.Error())
 		}
 
-		leet.GetQuestionInfo(param).Print(withDetail)
+		fmt.Println(leet.GetQuestionInfo(param))
+		leet.InfoPrint(leet.GetQuestionInfo(param), withDetail)
 	},
 }
 

@@ -40,7 +40,7 @@ var clearCmd = &cobra.Command{
 			}
 
 			info := leet.GetQuestionInfo(param)
-			info.Print(withDetail)
+			leet.InfoPrint(info, withDetail)
 			fmt.Println(fmt.Sprintf("%s: %s", info.QuestionID, info.Title))
 
 			for _, dir := range info.SaveDir {

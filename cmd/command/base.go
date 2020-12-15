@@ -36,7 +36,7 @@ var baseCmd = &cobra.Command{
 			}
 
 			info := leet.GetQuestionInfo(param)
-			info.Print(withDetail)
+			leet.InfoPrint(info, withDetail)
 
 			for idx, dir := range info.SaveDir {
 
