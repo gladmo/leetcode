@@ -2,6 +2,7 @@ package command
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"go/format"
 	"io/ioutil"
@@ -88,7 +89,11 @@ var testCmd = &cobra.Command{
 		fmt.Println(commandName, strings.Join(commandParams, " "))
 		evaluation := ""
 		t := time.Now()
-		c := exec.Command(commandName, commandParams...)
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+		defer cancel()
+		c := exec.CommandContext(ctx, commandName, commandParams...)
+		// c := exec.Command(commandName, commandParams...)
 		result, err := c.CombinedOutput()
 		if err != nil {
 			fmt.Println(err.Error())
