@@ -26,5 +26,5 @@ func Export(prices []int, fee int) int {
 /****************************************************/
 
 func maxProfit(prices []int, fee int) int {
-
+	return 1
 }
