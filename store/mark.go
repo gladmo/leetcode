@@ -60,6 +60,12 @@ func (th Questions) Bytes() []byte {
 }
 
 func MarkQuestion(question Question) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("mark.questions"))
 		if err != nil {
@@ -84,6 +90,12 @@ func MarkQuestion(question Question) error {
 }
 
 func ListMarkQuestions() (qs Questions, err error) {
+	private, err := privateDB()
+	if err != nil {
+		return
+	}
+	defer private.Close()
+
 	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("mark.questions"))
 
@@ -152,6 +164,12 @@ func (th MarkSolutions) Bytes() []byte {
 }
 
 func MarkSolution(solution markSolution) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("mark.solutions"))
 		if err != nil {
@@ -176,6 +194,12 @@ func MarkSolution(solution markSolution) error {
 }
 
 func ListMarkSolutions() (ss MarkSolutions, err error) {
+	private, err := privateDB()
+	if err != nil {
+		return
+	}
+	defer private.Close()
+
 	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("mark.solutions"))
 

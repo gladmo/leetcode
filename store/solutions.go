@@ -102,6 +102,12 @@ func (th *answer) Tidy() {
 
 // AddSolution 添加解题答案
 func AddSolution(solution Solution) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("solutions"))
 		if err != nil {
@@ -136,6 +142,12 @@ type SolutionsList struct {
 }
 
 func ListSolution() (sl []SolutionsList, err error) {
+	private, err := privateDB()
+	if err != nil {
+		return
+	}
+	defer private.Close()
+
 	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
@@ -163,6 +175,12 @@ func ListSolution() (sl []SolutionsList, err error) {
 
 // GetSolution 获取测试过的题解
 func GetSolution(questionID string) (ss []Solution, err error) {
+	private, err := privateDB()
+	if err != nil {
+		return
+	}
+	defer private.Close()
+
 	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
@@ -179,6 +197,12 @@ func GetSolution(questionID string) (ss []Solution, err error) {
 
 // RemoveSolution delete solution
 func RemoveSolution(questionID string) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 
@@ -187,6 +211,12 @@ func RemoveSolution(questionID string) error {
 }
 
 func TidySolution(questionID string) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("solutions"))
 

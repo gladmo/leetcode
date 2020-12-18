@@ -22,7 +22,14 @@ type Store struct {
 	Question   string   `json:"question"`
 }
 
+// Stats leetcode db stats
 func Stats() {
+	leetcode, err := leetcodeDB()
+	if err != nil {
+		return
+	}
+	defer leetcode.Close()
+
 	b, _ := json.Marshal(leetcode.Stats())
 	fmt.Println(string(b))
 }
@@ -33,6 +40,12 @@ func (th Store) Bytes() []byte {
 }
 
 func UpdateQuestionInfo(store Store) error {
+	leetcode, err := leetcodeDB()
+	if err != nil {
+		return err
+	}
+	defer leetcode.Close()
+
 	return leetcode.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(storeKey))
 		if err != nil {
@@ -47,6 +60,12 @@ func UpdateQuestionInfo(store Store) error {
 }
 
 func QuestionInfo(titleSlug string) (info Store, err error) {
+	leetcode, err := leetcodeDB()
+	if err != nil {
+		return
+	}
+	defer leetcode.Close()
+
 	err = leetcode.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(storeKey))
 
@@ -67,6 +86,12 @@ func QuestionInfo(titleSlug string) (info Store, err error) {
 }
 
 func AllQuestionTitleSlug() (titles []string, err error) {
+	leetcode, err := leetcodeDB()
+	if err != nil {
+		return
+	}
+	defer leetcode.Close()
+
 	err = leetcode.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(storeKey))
 

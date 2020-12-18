@@ -11,6 +11,12 @@ import (
 const allProblemsKey = `leetcode.problems`
 
 func UpdateProblems(info []QuestionStats) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(allProblemsKey))
 		if err != nil {
@@ -27,6 +33,12 @@ func UpdateProblems(info []QuestionStats) error {
 }
 
 func ProblemsTTL(expireAt time.Time) error {
+	private, err := privateDB()
+	if err != nil {
+		return err
+	}
+	defer private.Close()
+
 	return private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(allProblemsKey))
 		if err != nil {
@@ -39,6 +51,12 @@ func ProblemsTTL(expireAt time.Time) error {
 }
 
 func ProblemInfoIsExpire() (ok bool, err error) {
+	private, err := privateDB()
+	if err != nil {
+		return
+	}
+	defer private.Close()
+
 	err = private.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(allProblemsKey))
 		if err != nil {
@@ -63,6 +81,12 @@ func ProblemInfoIsExpire() (ok bool, err error) {
 }
 
 func GetProblemsInfo(questionID string) (info QuestionStats, err error) {
+	private, err := privateDB()
+	if err != nil {
+		return
+	}
+	defer private.Close()
+
 	err = private.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(allProblemsKey))
 
