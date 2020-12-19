@@ -8,6 +8,9 @@ leetcode 本地化题库，有本地刷题/测试/调试/书签/题解记录等�
 
 本地刷题及单步调试算法、保留所有题解及查看解答变迁是本仓库存在的意义。
 
+使用示例：
+![usage](usage.gif)
+
 ## Intro
 本仓库是 [`leetcode-cn.com`](https://leetcode-cn.com) 本地化题库，包含本地化测试用例、常用 go 工具包的一个仓库。
 
